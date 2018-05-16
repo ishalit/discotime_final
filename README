@@ -1,0 +1,7 @@
+final project - oberlin cs241 
+may 2018 
+
+by: ilan ackelsberg, george hawk, cecelia tannous-taylor, sophie shalit 
+
+a program for arduino: 
+takes in an audio file, analyzes it, and outputs reactive patterns to an LED light matrix! 
