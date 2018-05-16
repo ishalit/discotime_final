@@ -14,9 +14,11 @@
 
 
 int serialvalue; // value for serial 
-const int potPin = A1; //val for potentiometer
-int val;
-int started;
+const int potPin = A1; //sets potentiometer to read from port A1
+int val; // value grabbed by poteniometer reading
+int started; //if serial begins reading from max
+
+/* george variables lol */
 double tempo=1000;
 double dlay = tempo/13;
 
@@ -47,27 +49,29 @@ uint16_t w;
 uint16_t h;
 
 void setup() {
-  // put your setup code here, to run once:
+  /* begins potentiometer reading*/
   pinMode(potPin, INPUT);
 
-  Serial.print(val);
+  //Serial.print(val);
 
   randomSeed(analogRead(0));
-  
+
+  /* intialize matrix */
   matrix.begin();
   matrix.setBrightness(40);
   matrix.setTextWrap(false);
   matrix.fillScreen(0);
   matrix.show();
 
+  /* begin serial reading */
   Serial.begin(9600);
   
   
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
   
+  /* store value from potentiometer */
   val = analogRead(potPin);
 
 
@@ -77,7 +81,7 @@ void loop() {
     started = 1; // set the started flag to on
   }
 
-  Serial.print(serialvalue);
+  //Serial.print(serialvalue);
 
   /* heartbeat */
   if(val>800 && val<1023) {
@@ -85,17 +89,19 @@ void loop() {
     int h=9;
     int s = serialvalue;
 
+    //set background color
     matrix.fillScreen(231);
-    
+
+    //draw lines
     matrix.drawLine(0, 9, 4, 9, matrix.Color(255, 0, 0));
     matrix.drawLine(4, 9, 6, h-s, matrix.Color(255, 0, 0));
     matrix.drawLine(6, h-s, 8, h+(2*s/3), matrix.Color(255, 0, 0));
     matrix.drawLine(8, h+(2*s/3), 10, h-(s/3), matrix.Color(255, 0, 0));
     matrix.drawLine(10, h-(s/3), 12, 9, matrix.Color(255, 0, 0));
     matrix.drawLine(12, 9, 15, 9, matrix.Color(255, 0, 0));
-  
+
+    //send data to matrix
     matrix.show();
-    matrix.fillScreen(0);
     
   }
 
@@ -103,9 +109,10 @@ void loop() {
   /* squares */
 
   if(val >600 && val < 800) {
+
+    //initialize variables
     x = 0;
     y = 0;
-  
     h = serialvalue;
     w = serialvalue;
   
@@ -115,9 +122,9 @@ void loop() {
       //countervalue++;
     }
 
-  
+    //fill matrix w new values
     matrix.fillRect(x, y, w, h, color);
-    matrix.show();
+    matrix.show(); //send data to matrix
 
     
   }
@@ -127,6 +134,8 @@ void loop() {
   if(val>300 && val<600) { 
      
     matrix.fillScreen(0);
+
+    //initialize variables
     int rndm1 = (rand() % 16);
     int rndm2 = (rand() % 16);
     int color1 = (rand() % 255);
@@ -134,8 +143,11 @@ void loop() {
     int color3 = (rand() % 255);
     int x = (rand() % 16);
     int y = (rand() % 16);
-        
-    if(serialvalue >4) {
+
+    //if sound goes over peak    
+    if(serialvalue > 4) {
+
+      //trigger random circle algorithm
       matrix.setBrightness(bright0);
       SnowFlake0(x, y, matrix.Color(color1, color2, color3));
       matrix.show();
@@ -173,7 +185,7 @@ void loop() {
         matrix.fillScreen(0);
         matrix.setBrightness(rand() % 50);
         rando(matrix.Color(rand() % 255, rand() % 255, rand() % 255));
-        matrix.show(); // This sends the updated pixel colors to the hardware.
+        matrix.show();
         delay(20);
         count = 0;
       }
@@ -187,16 +199,19 @@ void loop() {
     
     rand1 = (rand() % 4);
     rand2 = rand1;
+    
     while(rand2 == rand1)
     {
       rand2 = (rand() % 4);
     }
     rand3 = rand2;
+    
     while(rand3 == rand2 || rand3 == rand1)
     {
       rand3 = (rand() % 4);
     }
     rand4 = rand3;
+    
     while(rand4==rand3||rand4==rand2||rand4==rand1)
     {
       rand4 = (rand() % 4);
